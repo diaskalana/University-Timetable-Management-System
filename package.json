@@ -1,0 +1,28 @@
+{
+  "name": "assignment-01-it21220760",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/MhkFIDKy)",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose --runInBand",
+    "dev": "nodemon app.js",
+    "load-test": "artillery run tests/load-test.yml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assignment-01-it21220760": "file:",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.2",
+    "nodemailer": "^6.9.12"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  }
+}

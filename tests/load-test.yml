@@ -1,0 +1,100 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 300 # Duration of the test in seconds
+      arrivalRate: 10 # Number of arrivals per second, adjust as needed
+  defaults:
+    headers:
+      Content-Type: application/json
+
+scenarios:
+  - name: "Admin Login"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "kalana@gmail.com" # Provide valid login credentials
+            password: "123"
+      - capture:
+          as: "token"
+          json: $.token # Capture the JWT token from the response
+      - think: 2 # Wait for 2 seconds after capturing the token
+      - setCookie:
+          name: "token"
+          value: "{{ token }}"
+          path: "/"
+
+  - name: "Fetch Courses"
+    flow:
+      - get:
+          url: "/api/courses"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+
+  - name: "Create Course"
+    flow:
+      - post:
+          url: "/api/courses"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+          json:
+            name: "New Course"
+            code: "NEW101"
+            description: "New Course Description"
+            credits: 3
+
+  - name: "Create Timetable"
+    flow:
+      - post:
+          url: "/api/timetable"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+          json:
+            courseId: "65fae41f4ba9f654b6e7648e"
+            facultyId: "65fae41f4ba9f654b6e76491"
+            day: "Monday"
+            time: "10:00 AM"
+            room: "Room 101"
+
+  - name: "Create Resource"
+    flow:
+      - post:
+          url: "/api/resources"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+          json:
+            name: "Projector"
+
+  - name: "Create Room"
+    flow:
+      - post:
+          url: "/api/rooms"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+          json:
+            name: "101"
+            capacity: 50
+            bookedSlots:
+              [
+                {
+                  startTime: "2024-03-19T17:42:44.799+00:00",
+                  endTime: "2024-03-19T17:42:44.799+00:00",
+                },
+              ]
+
+  - name: "Enroll Student"
+    flow:
+      - post:
+          url: "/api/enrollments"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
+          json:
+            student: "65fae41f4ba9f654b6e76491"
+            course: "65fae41f4ba9f654b6e7648e"
+
+  - name: "Send Notification"
+    flow:
+      - post:
+          url: "/api/notifications/65fae43a69bcb0d9fdf7d0de/send"
+          cookies:
+            token: "{{ token }}" # Use the captured JWT token from the cookie for authorization
